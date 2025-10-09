@@ -1,4 +1,4 @@
-package dev.havlicektomas.user.domain.model
+package dev.havlicektomas.chirp.domain.model
 
 data class AuthenticatedUser(
     val user: User,
