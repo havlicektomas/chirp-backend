@@ -2,6 +2,7 @@ package dev.havlicektomas.chirp.api.controllers
 
 import dev.havlicektomas.chirp.api.dto.AuthenticatedUserDto
 import dev.havlicektomas.chirp.api.dto.LoginRequest
+import dev.havlicektomas.chirp.api.dto.RefreshRequest
 import dev.havlicektomas.chirp.api.dto.RegisterRequest
 import dev.havlicektomas.chirp.api.dto.UserDto
 import dev.havlicektomas.chirp.api.mappers.toAuthenticatedUserDto
@@ -36,5 +37,21 @@ class AuthController(private val authService: AuthService) {
             email = body.email,
             password = body.password
         ).toAuthenticatedUserDto()
+    }
+
+    @PostMapping("/refresh")
+    fun refresh(
+        @RequestBody body: RefreshRequest
+    ): AuthenticatedUserDto {
+        return authService
+            .refresh(body.refreshToken)
+            .toAuthenticatedUserDto()
+    }
+
+    @PostMapping("/logout")
+    fun logout(
+        @RequestBody body: RefreshRequest
+    ) {
+        authService.logout(body.refreshToken)
     }
 }
