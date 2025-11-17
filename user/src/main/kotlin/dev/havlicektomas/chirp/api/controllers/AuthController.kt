@@ -1,14 +1,18 @@
 package dev.havlicektomas.chirp.api.controllers
 
 import dev.havlicektomas.chirp.api.dto.AuthenticatedUserDto
+import dev.havlicektomas.chirp.api.dto.ChangePasswordRequest
+import dev.havlicektomas.chirp.api.dto.EmailRequest
 import dev.havlicektomas.chirp.api.dto.LoginRequest
 import dev.havlicektomas.chirp.api.dto.RefreshRequest
 import dev.havlicektomas.chirp.api.dto.RegisterRequest
+import dev.havlicektomas.chirp.api.dto.ResetPasswordRequest
 import dev.havlicektomas.chirp.api.dto.UserDto
 import dev.havlicektomas.chirp.api.mappers.toAuthenticatedUserDto
 import dev.havlicektomas.chirp.api.mappers.toUserDto
-import dev.havlicektomas.chirp.service.auth.AuthService
-import dev.havlicektomas.chirp.service.auth.EmailVerificationService
+import dev.havlicektomas.chirp.service.AuthService
+import dev.havlicektomas.chirp.service.EmailVerificationService
+import dev.havlicektomas.chirp.service.PasswordResetService
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -21,7 +25,8 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/auth")
 class AuthController(
     private val authService: AuthService,
-    private val emailVerificationService: EmailVerificationService
+    private val emailVerificationService: EmailVerificationService,
+    private val passwordResetService: PasswordResetService
 ) {
 
     @PostMapping("/register")
@@ -66,5 +71,29 @@ class AuthController(
         @RequestParam token: String
     ) {
         emailVerificationService.verifyEmail(token)
+    }
+
+    @PostMapping("/forgot-password")
+    fun forgotPassword(
+        @Valid @RequestBody body: EmailRequest
+    ) {
+        passwordResetService.requestPasswordReset(body.email)
+    }
+
+    @PostMapping("/reset-password")
+    fun resetPassword(
+        @Valid @RequestBody body: ResetPasswordRequest
+    ) {
+        passwordResetService.resetPassword(
+            token = body.token,
+            newPassword = body.newPassword
+        )
+    }
+
+    @PostMapping("/change-password")
+    fun changePassword(
+        @Valid @RequestBody body: ChangePasswordRequest
+    ) {
+        // TODO: Extract request user ID and call service
     }
 }

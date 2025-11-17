@@ -3,6 +3,7 @@ package dev.havlicektomas.chirp.api.exception_handling
 import dev.havlicektomas.chirp.domain.exception.EmailNotVerifiedException
 import dev.havlicektomas.chirp.domain.exception.InvalidCredentialsException
 import dev.havlicektomas.chirp.domain.exception.InvalidTokenException
+import dev.havlicektomas.chirp.domain.exception.SamePasswordException
 import dev.havlicektomas.chirp.domain.exception.UserAlreadyExistsException
 import dev.havlicektomas.chirp.domain.exception.UserNotFoundException
 import org.springframework.http.HttpStatus
@@ -57,6 +58,15 @@ class AuthExceptionHandler {
         e: EmailNotVerifiedException
     ) = mapOf(
         "code" to "EMAIL_NOT_VERIFIED",
+        "message" to e.message
+    )
+
+    @ExceptionHandler(SamePasswordException::class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    fun onSamePassword(
+        e: SamePasswordException
+    ) = mapOf(
+        "code" to "SAME_PASSWORD",
         "message" to e.message
     )
 

@@ -1,4 +1,4 @@
-package dev.havlicektomas.chirp.service.auth
+package dev.havlicektomas.chirp.service
 
 import dev.havlicektomas.chirp.domain.exception.InvalidTokenException
 import dev.havlicektomas.chirp.domain.model.UserId
